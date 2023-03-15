@@ -3,61 +3,64 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const databaseInit = require('./config/databaseInit');
 const seedDbFromJson = require('./services/databaseService');
-const json = require('koa-json');
+//const json = require('koa-json');
 const newsService = require('./services/newsService');
-
-
 
 //If there is no need of seed uncomment databaseInit() and comment seedDbFromJson();
 
-seedDbFromJson();
-//databaseInit();
+//seedDbFromJson();
+databaseInit();
 
 
 const app = new Koa();
 const router = new Router();
 
-router.get('/', async (ctx, next) => {
+router.get('/news', async (ctx) => {
     const title = ctx.query.title;
-    const from = new Date(ctx.query.from);
-    const to = new Date(ctx.query.to);
+    const from = ctx.query.from;
+    const to = ctx.query.to;
+    const exactDate = ctx.query.exactDate;
     let news = await newsService.getAll();
 
-    //TODO use db filtration instead of inmemory filtering
     try {
+        //Filtering by title
         if (title) {
-            await news.filter(news => news.title.toLowerCase().includes(title.toLowerCase()));
+            news = news.filter(news => news.title.toLowerCase().includes(title.toLowerCase()));
         }
         if (from) {
-            news = news.filter(news => news.publishedAt >= from);
+            const fromCompare = new Date(from).toISOString().split('T')[0];
+            news = news.filter(news => new Date(news.publishedAt).toISOString().split('T')[0] >= fromCompare);
         }
         if (to) {
-            news = news.filter(news => news.publishedAt <= to);
+            const toCompare = new Date(to).toISOString().split('T')[0];
+            news = news.filter(news => new Date(news.publishedAt).toISOString().split('T')[0] <= toCompare);
+        }
+        if (exactDate) {
+            const exactDateCompare = new Date(exactDate).toISOString().split('T')[0];
+            news = news.filter(news => new Date(news.publishedAt).toISOString().split('T')[0] === exactDateCompare);
         }
 
-        const filteredDate = newsService.filterDate(from, to);
 
-        console.log(filteredDate);
-        console.log(news.publishedAt);
+    } catch (err) {
+        ctx.status = 500;
+        ctx.body = { message: err.message };
+    }
+
+    ctx.body = news;
+
+});
+router.get('/', async ctx => {
+    try {
+        const news = await newsService.getAll();
         ctx.body = news;
     } catch (err) {
         ctx.status = 500;
         ctx.body = { message: err.message };
     }
-    (next);
-});
-router.get('/news', async ctx => {
-    try {
-        const publications = await newsService.getAll();
-        ctx.body = publications;
-    } catch (err) {
-        ctx.status = 500;
-        ctx.body = { message: err.message };
-    }
 });
 
 
-app.use(json());
+//app.use(json());
 app.use(router.routes());
 
 
