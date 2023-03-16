@@ -3,9 +3,9 @@ const Router = require('koa-router');
 const databaseInit = require('./config/databaseInit');
 const seedDbFromJson = require('./services/databaseService');
 const newsService = require('./services/newsService');
+const { isValidSort, isValidTitle, isValidDate } = require('./utils/validators');
 
-//If there is no need of seed uncomment databaseInit() and comment seedDbFromJson();
-
+//If there is no need of seed, uncomment databaseInit() and comment seedDbFromJson();
 //seedDbFromJson();
 databaseInit();
 
@@ -18,6 +18,19 @@ router.get('/fenews/filter', async (ctx) => {
     const to = ctx.query.to;
     const exactDate = ctx.query.exactDate;
     let news = await newsService.getAll();
+
+    if (!isValidTitle(title)) {
+        ctx.set('Content-Type', 'application/json');
+        ctx.body = { message: 'The title must be between 2 and 30 characters !' };
+        ctx.status = 422;
+        return;
+    };
+    if (!(isValidDate(from) || isValidDate(to) || isValidDate(exactDate))) {
+        ctx.set('Content-Type', 'application/json');
+        ctx.body = { message: 'The date must be in format YYYY-MM-DD and must be valid date !' };
+        ctx.status = 422;
+        return;
+    };
 
     try {
         //Filtering by title
@@ -53,9 +66,16 @@ router.get('/fenews/sort', async (ctx) => {
     const titleSort = ctx.query.title;
     const date = ctx.query.date;
     let news = await newsService.getAll();
+    console.log(titleSort);
+
+    if (!isValidSort(titleSort) || !isValidSort(date)) {
+        ctx.set('Content-Type', 'application/json');
+        ctx.body = { message: 'The date/title must be equal to \'asc\' or \'desc\' !' };
+        ctx.status = 422;
+        return;
+    };
 
     try {
-        ;
         //Sort by title
         if (titleSort == 'asc') {
             news = news.sort((a, b) => {
@@ -73,7 +93,6 @@ router.get('/fenews/sort', async (ctx) => {
                     ? -1
                     : 1;
             });
-
         }
         //Sort by date
         if (date == "asc") {
