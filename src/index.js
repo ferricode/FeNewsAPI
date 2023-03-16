@@ -1,4 +1,3 @@
-
 const Koa = require('koa');
 const Router = require('koa-router');
 const databaseInit = require('./config/databaseInit');
@@ -56,19 +55,20 @@ router.get('/fenews/sort', async (ctx) => {
     let news = await newsService.getAll();
 
     try {
+        ;
         //Sort by title
         if (titleSort == 'asc') {
             news = news.sort((a, b) => {
-                const aFirstWord = a.titleSort.split(/[\s]+/, 1)[0].replace(/^['‘"]+|['‘"]+$/g, '');
-                const bFirstWord = b.titleSort.split(/[\s,]+/, 1)[0].replace(/^['‘"]+|['‘"]+$/g, '');
+                const aFirstWord = a.title.split(/[\s]+/, 1)[0].replace(/^['‘"]+|['‘"]+$/, '');
+                const bFirstWord = b.title.split(/[\s]+/, 1)[0].replace(/^['‘"]+|['‘"]+$/, '');
                 return aFirstWord.toLowerCase() < bFirstWord.toLowerCase()
                     ? -1
                     : 1;
             });
         } else if (titleSort == 'desc') {
             news = news.sort((a, b) => {
-                const aFirstWord = a.titleSort.split(/[\s]+/, 1)[0].replace(/^['‘"]+|['‘"]+$/g, '');
-                const bFirstWord = b.titleSort.split(/[\s,]+/, 1)[0].replace(/^['‘"]+|['‘"]+$/g, '');
+                const aFirstWord = a.title.split(/[\s]+/, 1)[0].replace(/^['‘"]+|['‘"]+$/, '');
+                const bFirstWord = b.title.split(/[\s]+/, 1)[0].replace(/^['‘"]+|['‘"]+$/, '');
                 return aFirstWord.toLowerCase() > bFirstWord.toLowerCase()
                     ? -1
                     : 1;
