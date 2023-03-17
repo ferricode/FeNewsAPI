@@ -19,24 +19,21 @@ router.get('/fenews/filter', async (ctx) => {
     const exactDate = ctx.query.exactDate;
     let news = await newsService.getAll();
 
-    console.log(exactDate);
-    console.log(from);
     if (!isValidExactDate(ctx.query)) {
         ctx.set('Content-Type', 'application/json');
-        ctx.body = { message: 'The \'exactDate\' can\'t be used together with \'from\' and \'to\'!' };
+        ctx.body = { error: 'The \'exactDate\' can\'t be used together with \'from\' and \'to\'!' };
         ctx.status = 422;
-        console.log(isValidExactDate(ctx.query));
         return;
     };
     if (!isValidTitle(title)) {
         ctx.set('Content-Type', 'application/json');
-        ctx.body = { message: 'The title must be between 3 and 30 characters !' };
+        ctx.body = { error: 'The title must be between 3 and 30 characters !' };
         ctx.status = 422;
         return;
     };
     if (!isValidDate(from) || !isValidDate(to) || !isValidDate(exactDate)) {
         ctx.set('Content-Type', 'application/json');
-        ctx.body = { message: 'The date must be in format YYYY-MM-DD and must be valid date !' };
+        ctx.body = { error: 'The date must be in format YYYY-MM-DD and must be valid date !' };
         ctx.status = 422;
         return;
     };
@@ -75,11 +72,10 @@ router.get('/fenews/sort', async (ctx) => {
     const titleSort = ctx.query.title;
     const date = ctx.query.date;
     let news = await newsService.getAll();
-    console.log(titleSort);
 
     if (!isValidSort(titleSort) || !isValidSort(date)) {
         ctx.set('Content-Type', 'application/json');
-        ctx.body = { message: 'The date/title must be equal to \'asc\' or \'desc\' !' };
+        ctx.body = { error: 'The date/title must be equal to \'asc\' or \'desc\' !' };
         ctx.status = 422;
         return;
     };
@@ -123,6 +119,17 @@ router.get('/fenews/sort', async (ctx) => {
     }
 
     ctx.body = news;
+
+});
+router.get('/fenews', async (ctx, next) => {
+    const message = { message: 'Welcome to feNewsAPI! You can go to \'/fenews/sort\' or \'/fenews/filter\'' };
+    ctx.status = 200;
+    ctx.body = message;
+});
+router.get(/(|^$)/, async (ctx) => {
+    const error = { error: 'NOT FOUND' };
+    ctx.status = 404;
+    ctx.body = error;
 
 });
 
