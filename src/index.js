@@ -3,7 +3,7 @@ const Router = require('koa-router');
 const databaseInit = require('./config/databaseInit');
 const seedDbFromJson = require('./services/databaseService');
 const newsService = require('./services/newsService');
-const { isValidSort, isValidTitle, isValidDate } = require('./utils/validators');
+const { isValidSort, isValidTitle, isValidDate, isValidExactDate } = require('./utils/validators');
 
 //If there is no need of seed, uncomment databaseInit() and comment seedDbFromJson();
 //seedDbFromJson();
@@ -19,13 +19,22 @@ router.get('/fenews/filter', async (ctx) => {
     const exactDate = ctx.query.exactDate;
     let news = await newsService.getAll();
 
+    console.log(exactDate);
+    console.log(from);
+    if (!isValidExactDate(ctx.query)) {
+        ctx.set('Content-Type', 'application/json');
+        ctx.body = { message: 'The \'exactDate\' can\'t be used together with \'from\' and \'to\'!' };
+        ctx.status = 422;
+        console.log(isValidExactDate(ctx.query));
+        return;
+    };
     if (!isValidTitle(title)) {
         ctx.set('Content-Type', 'application/json');
-        ctx.body = { message: 'The title must be between 2 and 30 characters !' };
+        ctx.body = { message: 'The title must be between 3 and 30 characters !' };
         ctx.status = 422;
         return;
     };
-    if (!(isValidDate(from) || isValidDate(to) || isValidDate(exactDate))) {
+    if (!isValidDate(from) || !isValidDate(to) || !isValidDate(exactDate)) {
         ctx.set('Content-Type', 'application/json');
         ctx.body = { message: 'The date must be in format YYYY-MM-DD and must be valid date !' };
         ctx.status = 422;
