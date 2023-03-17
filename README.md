@@ -24,12 +24,12 @@ Down below you will find the optional parameters you can use to sort and filter 
 
 | Object | Description |
 | ------ | ----------- |
-| `exactDate`    | Use this parameter to filter news by the exact date you want to. The date should be in format YYY-MM-DD and be correct date. The 'exactDate' can't be used together with 'from' and 'to'!'. You can use it together with 'title' parameter. It is an optional parameter. |
-| `exactDate`    | Use this parameter to filter news by the exact date you want to. The date should be in format YYY-MM-DD and be correct date. The 'exactDate' can't be used together with 'from' and 'to'!'. You can use it together with 'to' and/or 'from' parameter. It is an optional parameter. |
-| `title`   | Use this parameter to filter news by word in the news title. You can use a word between 3 and 30 characters. It is an optional parameter |
-| `from` | Use this parameter to filter news by the date you want to start from. The date should be in format YYY-MM-DD and be correct date. For example you should not use 2023-33-32. It is an optional parameter. |
-| `to`    | Use this parameter to filter news by the date you want to start from. The date should be in format YYY-MM-DD and be correct date. For example you should not use 2023-33-32. It is an optional parameter. |
-| `exactDate`    | Use this parameter to filter news by the exact date you want to. The date should be in format YYY-MM-DD and be correct date. The 'exactDate' can't be used together with 'from' and 'to'!'. You can use it together with 'title' parameter. It is an optional parameter. |
+| **exactDate**    | Use this parameter to filter news by the exact date you want to. The date should be in format YYY-MM-DD and be correct date. The 'exactDate' can't be used together with 'from' and 'to'!'. You can use it together with 'title' parameter. It is an optional parameter. |
+| **exactDate**    | Use this parameter to filter news by the exact date you want to. The date should be in format YYY-MM-DD and be correct date. The 'exactDate' can't be used together with 'from' and 'to'!'. You can use it together with 'to' and/or 'from' parameter. It is an optional parameter. |
+| **title**   | Use this parameter to filter news by word in the news title. You can use a word between 3 and 30 characters. It is an optional parameter |
+| **from** | Use this parameter to filter news by the date you want to start from. The date should be in format YYY-MM-DD and be correct date. For example you should not use 2023-33-32. It is an optional parameter. |
+| **to**    | Use this parameter to filter news by the date you want to start from. The date should be in format YYY-MM-DD and be correct date. For example you should not use 2023-33-32. It is an optional parameter. |
+| **exactDate**    | Use this parameter to filter news by the exact date you want to. The date should be in format YYY-MM-DD and be correct date. The 'exactDate' can't be used together with 'from' and 'to'!'. You can use it together with 'title' parameter. It is an optional parameter. |
 
 + Example:
    
@@ -51,8 +51,8 @@ Down below you will find the optional parameters you can use to sort and filter 
 
 | Object | Description |
 | ------ | ----------- |
-| `title`    | Use this parameter to sort news by title ascending or descending. The values that are allowed are 'asc', and 'desc'  You can use it together with 'date' parameter. It is an optional parameter. |
-| `date`    | Use this parameter to sort news by date ascending or descending. The values that are allowed are 'asc', and 'desc'  You can use it together with 'title' parameter. It is an optional parameter. |
+|**title**    | Use this parameter to sort news by title ascending or descending. The values that are allowed are 'asc', and 'desc'  You can use it together with 'date' parameter. It is an optional parameter. |
+| **date**    | Use this parameter to sort news by date ascending or descending. The values that are allowed are 'asc', and 'desc'  You can use it together with 'title' parameter. It is an optional parameter. |
 
 + Example:
    
